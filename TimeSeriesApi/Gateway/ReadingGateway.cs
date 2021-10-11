@@ -32,11 +32,11 @@ namespace TimeSeriesApi.Gateway
 
         public static async Task<object[]> TimeSeriesData(int buildingId, int objectId, int dataFieldId, DateTime from, DateTime to)
         {
-            string query = @"Select CAST(CAST(Timestamp AS TIMESTAMP) AS BIGINT) 'Timestamp',Value From Reading Where ";
+            string query = @"Select Timestamp,Value From Reading Where ";
             if (buildingId > 0) query += "BuildingId=" + buildingId + " And ";
             if (objectId > 0) query += "ObjectId=" + objectId + " And ";
             if (dataFieldId > 0) query += "DataFieldId=" + dataFieldId + " And ";
-            query += "Timestamp between '" + from + "' And '" + to + "'";
+            query += "Timestamp between '" + from + "' And '" + to + "' Order By Timestamp";
             using IDbConnection con = new SqlConnection(ConnectionString);
             return (await con.QueryAsync(query, new DynamicParameters())).
                 Select(d => new object[] { d.Timestamp, d.Value }).ToArray();
