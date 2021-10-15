@@ -32,7 +32,7 @@ namespace TimeSeriesApi.Gateway
 
         public static async Task<object[]> TimeSeriesData(int buildingId, int objectId, int dataFieldId, DateTime from, DateTime to)
         {
-            string query = @"Select Timestamp,Value From Reading Where ";
+            string query = @"Select DATEDIFF_BIG(ms, DATEFROMPARTS(1970, 1, 1), Timestamp) 'Timestamp',Value From Reading Where ";
             if (buildingId > 0) query += "BuildingId=" + buildingId + " And ";
             if (objectId > 0) query += "ObjectId=" + objectId + " And ";
             if (dataFieldId > 0) query += "DataFieldId=" + dataFieldId + " And ";
